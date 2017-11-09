@@ -75,7 +75,7 @@ public class ResourcesManager {
 	}
 
 	private static String getLatestDownloadLocation() {
-		return "https://thebombzen.com/ZenGIFr/resources/latest.txt";
+		return "https://thebombzen.com/Zen-GIFr/resources/latest.txt";
 	}
 
 	private static String getPkgVersionsLocation(String pkg) {
@@ -86,7 +86,7 @@ public class ResourcesManager {
 					case WINDOWS_64:
 					case WINDOWS_32:
 					case MACOS_64:
-						return String.format("https://thebombzen.com/ZenGIFr/resources/%s/%s-%s-version.txt", pkg,
+						return String.format("https://thebombzen.com/Zen-GIFr/resources/%s/%s-%s-version.txt", pkg,
 								pkg, local.name());
 					default:
 						return "";
@@ -95,7 +95,7 @@ public class ResourcesManager {
 				switch (OperatingSystem.getLocalOS()) {
 					case WINDOWS_64:
 					case WINDOWS_32:
-						return String.format("https://thebombzen.com/ZenGIFr/resources/%s/%s-%s-version.txt", pkg,
+						return String.format("https://thebombzen.com/Zen-GIFr/resources/%s/%s-%s-version.txt", pkg,
 								pkg, local.name());
 					default:
 						return "";
@@ -110,12 +110,12 @@ public class ResourcesManager {
 		if (name.isEmpty()) {
 			return "";
 		} else {
-			return "https://thebombzen.com/ZenGIFr/resources/" + pkg + "/" + name;
+			return "https://thebombzen.com/Zen-GIFr/resources/" + pkg + "/" + name;
 		}
 	}
 
 	private static String getOpenSansDownloadLocation() {
-		return "https://thebombzen.com/ZenGIFr/resources/OpenSans-Semibold.ttf.xz";
+		return "https://thebombzen.com/Zen-GIFr/resources/OpenSans-Semibold.ttf.xz";
 	}
 
 	private static Resource openSans = null;

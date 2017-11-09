@@ -35,7 +35,7 @@ public class AboutDialog extends JDialog {
 		box.add(Box.createVerticalStrut(10));
 		box.add(GUIHelper.wrapLeftAligned(new JLabel("Licensed under the MIT license.")));
 		box.add(Box.createVerticalStrut(10));
-		box.add(GUIHelper.wrapLeftAligned(new JLabel("See https://thebombzen.com/ZenGIFr/ for details.")));
+		box.add(GUIHelper.wrapLeftAligned(new JLabel("See https://thebombzen.com/Zen-GIFr/ for details.")));
 		box.add(Box.createVerticalStrut(10));
 		checkForUpdates = new JButton("Check for updates");
 		close = new JButton("Close");
