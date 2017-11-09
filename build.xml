@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns:ivy="antlib:org.apache.ivy.ant"
-name="TumblGIFifier" default="main" basedir=".">
+name="Zen GIFr" default="main" basedir=".">
 
-	<property name="projectName" value="TumblGIFifier" />
+	<property name="projectName" value="Zen GIFr" />
 	<property name="src.dir" location="src" />
 	<property name="build.dir" location="bin" />
 	<property name="dist.dir" location="dist" />
 	<property name="dist.lib.dir" location="dist/lib" />
 	<property name="lib.dir" value="lib" />
-	<property name="main-class" value="thebombzen.tumblgififier.LibraryLoader" />
+	<property name="main-class" value="com.thebombzen.zengifr.LibraryLoader" />
 
 	<target name="init">
 		<mkdir dir="${build.dir}" />
