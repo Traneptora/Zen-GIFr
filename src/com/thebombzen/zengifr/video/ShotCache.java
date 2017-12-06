@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import com.thebombzen.zengifr.gui.ImagePanel;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
 import com.thebombzen.zengifr.util.io.IOHelper;
 import com.thebombzen.zengifr.util.io.resources.Resource;
 import com.thebombzen.zengifr.util.io.resources.ResourcesManager;

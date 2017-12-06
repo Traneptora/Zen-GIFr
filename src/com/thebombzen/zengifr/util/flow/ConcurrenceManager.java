@@ -1,4 +1,4 @@
-package com.thebombzen.zengifr.util;
+package com.thebombzen.zengifr.util.flow;
 
 import static com.thebombzen.zengifr.ZenGIFr.log;
 import java.awt.EventQueue;
@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import com.thebombzen.zengifr.ZenGIFr;
 import com.thebombzen.zengifr.gui.MainFrame;
 import com.thebombzen.zengifr.util.io.IOHelper;
@@ -216,6 +217,14 @@ public final class ConcurrenceManager {
 		cleaningUp = false;
 	}
 
+	/**
+	 * An unchecked wrapper to throw a checked exception.
+	 * It abuses Generics Type Erasure to allow you to throw a checked exception
+	 * from a method that does not declare it to be thrown. Useful to throw IOException
+	 * inside iterators and the like.
+	 * @param e
+	 * @return
+	 */
 	public static <T> T sneakyThrow(Throwable e) {
 		return ConcurrenceManager.<RuntimeException, T> sneakyThrow0(e);
 	}
@@ -267,9 +276,46 @@ public final class ConcurrenceManager {
 	 * timing.
 	 */
 	public static Future<?> executeLater(Runnable r) {
-		return threadPool.submit(r);
+		return threadPool.submit(() -> {
+			try {
+				r.run();
+			} catch (Throwable t) {
+				log(t);
+				sneakyThrow(t);
+			}
+		});
 	}
 
+	/**
+	 * Executes a Runnable on the EventQueue.
+	 * It wraps EventQueue.invokeLater with extra exception handling.
+	 */
+	public static void executeOnEventQueue(Runnable r) {
+		EventQueue.invokeLater(() -> {
+			try {
+				r.run();
+			} catch (Throwable t) {
+				log(t);
+				sneakyThrow(t);
+			}
+		});
+	}
+	
+	/**
+	 * Executes a Runnable on the EventQueue.
+	 * It wraps EventQueue.invokeLater with extra exception handling.
+	 */
+	public static void executeOnEventQueue(Consumer<? super Throwable> exceptionHandler, Runnable r) {
+		EventQueue.invokeLater(() -> {
+			try {
+				r.run();
+			} catch (Throwable t) {
+				log(t);
+				sneakyThrow(t);
+			}
+		});
+	}
+	
 	/**
 	 * This queues a runnable to be executed at regular intervals. It's called
 	 * an "Imprecise" tick clock because there is no guarantee that the
@@ -277,7 +323,14 @@ public final class ConcurrenceManager {
 	 * longer it will be until the next iteration is executed.
 	 */
 	public static Future<?> createImpreciseTickClock(long tickTime, TimeUnit timeUnit, Runnable callback) {
-		return threadPool.scheduleWithFixedDelay(callback, 0, tickTime, timeUnit);
+		return threadPool.scheduleWithFixedDelay(() -> {
+			try {
+				callback.run();
+			} catch (Throwable t) {
+				log(t);
+				sneakyThrow(t);
+			}
+		}, 0, tickTime, timeUnit);
 	}
 
 	private ConcurrenceManager() {

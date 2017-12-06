@@ -1,4 +1,4 @@
-package com.thebombzen.zengifr.util;
+package com.thebombzen.zengifr.util.flow;
 
 @FunctionalInterface
 public interface ExceptionalRunnable {

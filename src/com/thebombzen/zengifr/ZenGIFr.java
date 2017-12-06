@@ -6,10 +6,10 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import com.thebombzen.zengifr.gui.MainFrame;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
-import com.thebombzen.zengifr.util.DefaultTask;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.DefaultTask;
+import com.thebombzen.zengifr.util.flow.LogExceptionHandler;
 import com.thebombzen.zengifr.util.io.IOHelper;
 import com.thebombzen.zengifr.util.io.TeeOutputStream;
 import com.thebombzen.zengifr.util.io.resources.ResourcesManager;
@@ -18,7 +18,7 @@ import com.thebombzen.zengifr.util.text.StatusProcessor;
 public final class ZenGIFr {
 
 	/** The version of Zen GIFr */
-	public static final String VERSION = "0.8.0";
+	public static final String VERSION = "0.8.1";
 
 	/**
 	 * This is so we can cleanup a mess left by older versions. The version
@@ -33,7 +33,7 @@ public final class ZenGIFr {
 	 * directory from ~/.tumblgififier to ~/.config/tumblgififier
 	 * 
 	 */
-	public static final int VERSION_IDENTIFIER = 3;
+	public static final int VERSION_IDENTIFIER = 4;
 
 	/**
 	 * This output stream prints to the log file.
@@ -176,18 +176,13 @@ public final class ZenGIFr {
 		}
 		if (version < 3) {
 			Path legacyLocation = ResourcesManager.getLegacyLocalResourceLocation();
-			if (Files.exists(legacyLocation)) {
-				try {
-					processor.appendStatus("Cleaning legacy appdata location...");
-					Files.walk(legacyLocation).sorted(Comparator.<Path> reverseOrder())
-							.forEach(IOHelper::deleteQuietly);
-					processor.replaceStatus("Cleaning legacy appdata location... done.");
-				} catch (IOException ioe) {
-					processor.appendStatus("Error cleaning old temporary files.");
-					log(ioe);
-					success = false;
-				}
-			}
+			IOHelper.recursiveDelete(legacyLocation, LogExceptionHandler.INSTANCE);
+		}
+		if (version < 4) {
+			Path legacyLocation = ResourcesManager.getLocalResourceLocation().getParent().resolve("tumblgififier");
+			IOHelper.recursiveDelete(legacyLocation, LogExceptionHandler.INSTANCE);
+			legacyLocation = ResourcesManager.getLocalResourceLocation().getParent().resolve("Zen GIFr");
+			IOHelper.recursiveDelete(legacyLocation, LogExceptionHandler.INSTANCE);
 		}
 		try (Writer w = Files.newBufferedWriter(ResourcesManager.getLocalFile("version_identifier.txt"))) {
 			w.write(String.format("%d\n", ZenGIFr.VERSION_IDENTIFIER));

@@ -1,4 +1,4 @@
-package com.thebombzen.zengifr.util;
+package com.thebombzen.zengifr.util.flow;
 
 public class DefaultTask implements Task {
 

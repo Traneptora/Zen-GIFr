@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
 import com.thebombzen.zengifr.util.io.IOHelper;
 import com.thebombzen.zengifr.util.io.resources.ProcessTerminatedException;
 import com.thebombzen.zengifr.util.io.resources.Resource;

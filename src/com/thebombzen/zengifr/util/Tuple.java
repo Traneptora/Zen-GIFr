@@ -1,5 +1,7 @@
 package com.thebombzen.zengifr.util;
 
+import java.util.Objects;
+
 /**
  * This represents a tuple of two elements, i.e. an ordered pair. The purpose is
  * to use a Tuple in a Map or a Set, so we can can create a set of ordered pairs
@@ -13,9 +15,9 @@ package com.thebombzen.zengifr.util;
  * @param <F>
  *            This is the type of the second component of the ordered pair.
  */
-public class Tuple<E, F> {
-	private E e;
-	private F f;
+public class Tuple<X, Y> {
+	public X x;
+	public Y y;
 
 	/**
 	 * Construct an ordered pair of two elements.
@@ -25,52 +27,20 @@ public class Tuple<E, F> {
 	 * @param f
 	 *            the second component of the ordered pair
 	 */
-	public Tuple(E e, F f) {
-		this.e = e;
-		this.f = f;
-	}
-
-	/**
-	 * This is the getter for the first component.
-	 */
-	public E getFirst() {
-		return e;
-	}
-
-	/**
-	 * This is the setter for the first component.
-	 */
-	public void setFirst(E e) {
-		this.e = e;
-	}
-
-	/**
-	 * This is the getter for the second component.
-	 */
-	public F getSecond() {
-		return f;
-	}
-
-	/**
-	 * This is the setter for the second component.
-	 */
-	public void setSecond(F f) {
-		this.f = f;
+	public Tuple(X x, Y y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	/**
 	 * The hash code function calls the hash code of its two components. Because
 	 * this class is designed for easy usage in HashMaps and HashSets, it is
-	 * advised to use E and F that implement some form of hashCode that isn't
+	 * advised to use X and Y that implement some form of hashCode that isn't
 	 * the identity hash code.
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((e == null) ? 0 : e.hashCode());
-		result = prime * result + ((f == null) ? 0 : f.hashCode());
-		return result;
+		return Objects.hash(x, y);
 	}
 
 	/**
@@ -81,33 +51,28 @@ public class Tuple<E, F> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Tuple)) {
 			return false;
-		Tuple<?, ?> other = (Tuple<?, ?>) obj;
-		if (e == null) {
-			if (other.e != null)
-				return false;
-		} else if (!e.equals(other.e))
-			return false;
-		if (f == null) {
-			if (other.f != null)
-				return false;
-		} else if (!f.equals(other.f))
-			return false;
-		return true;
+		}
+		Tuple<?, ?> other = (Tuple<?, ?>)obj;
+		return Objects.deepEquals(x, other.x) && Objects.deepEquals(y, other.y);
 	}
 
+
+
 	/**
-	 * This method returns a string of the form "(e, f)" where E and F are the
+	 * This method returns a string of the form "(x, y)" where x and y are the
 	 * first and second components, respectively.
 	 */
 	@Override
 	public String toString() {
-		return "(" + e + ", " + f + ")";
+		return "(" + Objects.toString(x) + ", " + Objects.toString(y) + ")";
 	}
 
 }

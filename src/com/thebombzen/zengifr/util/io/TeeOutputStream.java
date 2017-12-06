@@ -1,11 +1,13 @@
 package com.thebombzen.zengifr.util.io;
 
+import static com.thebombzen.zengifr.ZenGIFr.log;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
 
 /**
  * This stream behaves like a FilterOutputStream for several output stream. It
@@ -52,14 +54,32 @@ public class TeeOutputStream extends OutputStream {
 		}
 	}
 
-	/**
-	 * This implementation of this method does not throw IOException no matter
-	 * what.
-	 */
 	@Override
-	public void close() {
+	public void close() throws IOException {
+		List<IOException> ioes = new ArrayList<>();
+		List<Throwable> exs = new ArrayList<>();
 		for (OutputStream out : outs) {
-			IOHelper.closeQuietly(out);
+			try {
+				out.close();
+			} catch (IOException ioe) {
+				ioes.add(ioe);
+			} catch (Throwable ex) {
+				exs.add(ex);
+			}
+		}
+		Throwable toThrow = null;
+		for (IOException ioe : ioes) {
+			log(ioe);
+			if (toThrow == null)
+				toThrow = ioe;
+		}
+		for (Throwable ex : exs) {
+			log(ex);
+			if (toThrow == null)
+				toThrow = ex;
+		}
+		if (toThrow != null) {
+			ConcurrenceManager.sneakyThrow(toThrow);
 		}
 	}
 }

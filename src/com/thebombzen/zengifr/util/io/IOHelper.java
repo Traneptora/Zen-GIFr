@@ -18,11 +18,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 import org.tukaani.xz.XZInputStream;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
-import com.thebombzen.zengifr.util.DefaultTask;
-import com.thebombzen.zengifr.util.ExceptionalConsumer;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.DefaultTask;
+import com.thebombzen.zengifr.util.flow.GeneralExceptionHandler;
+import com.thebombzen.zengifr.util.flow.LogExceptionHandler;
 import com.thebombzen.zengifr.util.io.resources.ResourcesManager;
 
 /**
@@ -48,7 +51,7 @@ public final class IOHelper {
 	 */
 	static {
 		ConcurrenceManager.addShutdownTask(new DefaultTask(0, () -> {
-			tempFiles.stream().forEach(ExceptionalConsumer.uncheck(Files::delete));
+			tempFiles.stream().forEach(IOHelper::deleteQuietly);
 		}));
 	}
 
@@ -125,6 +128,27 @@ public final class IOHelper {
 			}
 			return true;
 		}
+	}
+	
+	public static boolean recursiveDelete(Path path, Consumer<Throwable> exceptionHandler) {
+		if (Files.notExists(path)) {
+			return true;
+		}
+
+		List<Throwable> exs = new ArrayList<>();
+		try {
+			Files.walk(path).sorted(Comparator.reverseOrder()).forEachOrdered((p) -> {
+				IOHelper.delete(p, exs::add);
+			});
+		} catch (Throwable t) {
+			exceptionHandler.accept(t);
+			return false;
+		} finally {
+			for (Throwable t : exs) {
+				exceptionHandler.accept(t);
+			}
+		}
+		return exs.size() == 0;
 	}
 
 	/**
@@ -234,15 +258,17 @@ public final class IOHelper {
 	 * @throws DirectoryNotEmptyException
 	 */
 	public static boolean deleteQuietly(Path path) {
+		return delete(path, GeneralExceptionHandler.create(IOException.class, new LogExceptionHandler()));
+	}
+	
+	public static boolean delete(Path path, Consumer<Throwable> exceptionHandler) {
 		if (path == null) {
 			return true;
 		}
 		try {
 			Files.deleteIfExists(path);
-		} catch (DirectoryNotEmptyException dnee) {
-			return ConcurrenceManager.sneakyThrow(dnee);
-		} catch (IOException ex) {
-			log(ex);
+		} catch (Throwable t) {
+			exceptionHandler.accept(t);
 		}
 		return Files.notExists(path);
 	}

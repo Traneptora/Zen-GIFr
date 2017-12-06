@@ -1,4 +1,4 @@
-package com.thebombzen.zengifr.util;
+package com.thebombzen.zengifr.util.flow;
 
 public interface Task extends Runnable, Comparable<Task> {
 

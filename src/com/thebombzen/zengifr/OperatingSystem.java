@@ -12,27 +12,27 @@ public enum OperatingSystem {
 
 	static {
 		WINDOWS_64.exeExtension = ".exe";
-		WINDOWS_64.localResourceLocation = Paths.get(System.getenv("appdata"), "Zen GIFr");
+		WINDOWS_64.localResourceLocation = Paths.get(System.getenv("appdata"), "Zen-GIFr");
 		WINDOWS_64.isUnix = false;
 		WINDOWS_64.isWindows = true;
 		WINDOWS_64.nullStream = "NUL";
 		WINDOWS_32.exeExtension = ".exe";
-		WINDOWS_32.localResourceLocation = Paths.get(System.getenv("appdata"), "Zen GIFr");
+		WINDOWS_32.localResourceLocation = Paths.get(System.getenv("appdata"), "Zen-GIFr");
 		WINDOWS_32.isUnix = false;
 		WINDOWS_32.isWindows = true;
 		WINDOWS_32.nullStream = "NUL";
 		MACOS_64.exeExtension = "";
 		MACOS_64.localResourceLocation = Paths.get(System.getProperty("user.home"), "Library", "Application Support",
-				"tumblgififier");
+				"Zen-GIFr");
 		MACOS_64.isUnix = true;
 		MACOS_64.isWindows = false;
 		MACOS_64.nullStream = "/dev/null";
-		String xdgConfigHome = System.getenv("XDG_CONFIG_HOME");
 		POSIX.exeExtension = "";
+		String xdgConfigHome = System.getenv("XDG_CONFIG_HOME");
 		if (xdgConfigHome == null) {
-			POSIX.localResourceLocation = Paths.get(System.getProperty("user.home"), ".config", "Zen GIFr");
+			POSIX.localResourceLocation = Paths.get(System.getProperty("user.home"), ".config", "Zen-GIFr");
 		} else {
-			POSIX.localResourceLocation = Paths.get(xdgConfigHome, "Zen GIFr");
+			POSIX.localResourceLocation = Paths.get(xdgConfigHome, "Zen-GIFr");
 		}
 		POSIX.isUnix = true;
 		POSIX.isWindows = false;

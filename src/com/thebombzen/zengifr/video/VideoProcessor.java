@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import com.thebombzen.zengifr.gui.MainFrame;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
 import com.thebombzen.zengifr.util.io.IOHelper;
 import com.thebombzen.zengifr.util.io.resources.ProcessTerminatedException;
 import com.thebombzen.zengifr.util.io.resources.Resource;

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 import com.thebombzen.zengifr.ZenGIFr;
-import com.thebombzen.zengifr.util.ConcurrenceManager;
+import com.thebombzen.zengifr.util.flow.ConcurrenceManager;
 import com.thebombzen.zengifr.util.io.IOHelper;
 import com.thebombzen.zengifr.util.io.resources.ResourcesManager;
 
